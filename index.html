@@ -19,17 +19,11 @@
     <!-- =========================
        FRONT PAGE BACKGROUND MEDIA
        ========================= -->
-
-    <!-- Option 1: Image as background (uncomment if needed) -->
-    <!-- <img src="front-image.jpg" alt="Front page image" class="front-media"> -->
-
-    <!-- Option 2: Video as background -->
     <video class="front-media" src="rain.mp4" autoplay muted loop playsinline></video>
 
     <!-- =========================
        LAUNCHER BUTTON (BOTTOM CENTER)
        ========================= -->
-    <!-- Clicking this toggles the boxes launcher -->
     <div class="launcher" id="openLauncher">
         <span></span>
     </div>
@@ -37,21 +31,24 @@
     <!-- =========================
        ROTATING BOXES CONTAINER
        ========================= -->
-    <!-- Initially hidden, scales up when launcher is clicked -->
     <div class="main_box" id="mainBox">
-        <!-- Each box has a position (pos1-pos3) and is linked to a video -->
-        <div class="box pos1" data-video="video1">HIGHWAY!</div>
-        <div class="box pos2" data-video="video2">SUPRISE!</div>
-        <div class="box pos3" data-video="video3">BESTEST!</div>
+        <!-- Boxes now contain images -->
+        <div class="box pos1" data-video="video1">
+            <img src="image1.jpg" alt="Box 1" />
+        </div>
+        <div class="box pos2" data-video="video2">
+            <img src="image2.jpg" alt="Box 2" />
+        </div>
+        <div class="box pos3" data-video="video3">
+            <img src="image3.jpg" alt="Box 3" />
+        </div>
     </div>
 
     <!-- =========================
        FULLSCREEN VIDEO PLAYER CONTAINER
        ========================= -->
-    <!-- Hidden by default; becomes visible when a box video is played -->
     <div class="video-player" id="videoPlayer" aria-hidden="true">
-
-        <!-- Individual videos (hidden until box is clicked) -->
+        <!-- Videos -->
         <video id="video1" src="meditation.mp4" loop playsinline preload="auto" style="display:none;"></video>
         <video id="video2" src="secret.mp4" loop playsinline style="display:none;"></video>
         <video id="video3" src="meditation.mp4" loop playsinline style="display:none;"></video>
@@ -59,19 +56,18 @@
         <!-- =========================
          FULLSCREEN TOGGLE BUTTON
          ========================= -->
-        <!-- Clicking toggles fullscreen mode for the current video -->
         <div id="fullscreenBtn" class="fullscreen-btn" role="button" aria-label="Fullscreen">
-            <span>FULL</span>
+            <!-- SVG fullscreen icon -->
+            <img src="ASSETS/full-screen-circle.svg" alt="Fullscreen" />
         </div>
 
         <!-- =========================
          CLOSE VIDEO BUTTON
          ========================= -->
-        <!-- Clicking stops video, resets it, and hides video player -->
         <div id="closeBtn" class="close-btn" role="button" aria-label="Close video">
-            <span>CLOSE</span>
+            <!-- SVG close icon -->
+            <img src="close.svg" alt="Close" />
         </div>
-
     </div>
 
     <!-- =========================
