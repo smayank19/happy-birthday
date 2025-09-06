@@ -76,11 +76,11 @@ mainBox.addEventListener('touchend', e => {
 });
 
 // ==================================================
-// BOX CLICK → PLAY VIDEO
+// BOX CLICK → PLAY VIDEO (FIXED FOR iPHONE INLINE)
 // ==================================================
 boxes.forEach((box, index) => {
   box.addEventListener("click", () => {
-    if(positions[index] === "pos2"){
+    if (positions[index] === "pos2") {
       const videoId = box.dataset.video;
 
       // Hide & reset all videos
@@ -98,17 +98,18 @@ boxes.forEach((box, index) => {
 
       // Play video
       video.play().then(() => {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
-          else if (video.requestFullscreen) video.requestFullscreen();
-        } else {
+        const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        // ✅ On iPhone/iPad → stay inline (no forced fullscreen)
+        if (!isMobile) {
+          // On Android/desktop, try to lock orientation
           lockOrientationLandscape();
         }
       }).catch(err => console.log("Play error:", err));
     }
   });
 });
+
 
 // ==================================================
 // CLOSE VIDEO BUTTON

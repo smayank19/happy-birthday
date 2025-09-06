@@ -147,7 +147,18 @@ body {
   width: 100%; 
   height: 100%; 
   object-fit: cover; 
+  -webkit-playsinline: true;
+  playsinline: true;
 }
+
+/* iPhone/iPad Safari fix — force inline video */
+video {
+  -webkit-transform: translateZ(0); /* force GPU rendering */
+  -webkit-overflow-scrolling: touch;
+  -webkit-playsinline: true;
+  playsinline: true;
+}
+
 
 /* Fullscreen button */
 .fullscreen-btn, .close-btn {
