@@ -1,5 +1,5 @@
 // ==================================================
-// ELEMENT SELECTION (safe)
+// ELEMENT SELECTION
 // ==================================================
 const launcher = document.getElementById("openLauncher");
 const mainBox = document.getElementById("mainBox");
@@ -15,8 +15,6 @@ const fullscreenBtn = document.getElementById("fullscreenBtn");
 let positions = ["pos1", "pos2", "pos3"];
 let dragStartX = null;
 let dragging = false;
-
-// Detect if device is mobile/tablet
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // ==================================================
@@ -26,15 +24,6 @@ if (launcher && mainBox) {
   launcher.addEventListener("click", () => {
     mainBox.classList.toggle("active");
   });
-}
-
-// ==================================================
-// ORIENTATION LOCK (Android/Desktop only)
-// ==================================================
-function lockOrientationLandscape() {
-  if (screen.orientation && screen.orientation.lock) {
-    screen.orientation.lock("landscape").catch(() => {});
-  }
 }
 
 // ==================================================
@@ -54,12 +43,10 @@ if (mainBox) {
     dragStartX = e.clientX;
     dragging = true;
   });
-
   mainBox.addEventListener("touchstart", e => {
     dragStartX = e.touches[0].clientX;
     dragging = true;
   });
-
   mainBox.addEventListener("mouseup", e => {
     if (!dragging) return;
     const diff = e.clientX - dragStartX;
@@ -67,7 +54,6 @@ if (mainBox) {
     else if (diff < -30) rotateBoxes("right");
     dragging = false;
   });
-
   mainBox.addEventListener("touchend", e => {
     if (!dragging) return;
     const diff = e.changedTouches[0].clientX - dragStartX;
@@ -86,7 +72,7 @@ boxes.forEach((box, index) => {
 
     const videoId = box.dataset.video;
     const video = document.getElementById(videoId);
-    if (!video) return; // safety
+    if (!video) return;
 
     // Hide & reset all videos
     videos.forEach(v => {
@@ -97,19 +83,12 @@ boxes.forEach((box, index) => {
 
     // Show selected video
     video.style.display = "block";
-    videoPlayer?.classList.add("active");
-    videoPlayer?.setAttribute("aria-hidden", "false");
-    mainBox?.classList.remove("active");
+    videoPlayer.classList.add("active");
+    videoPlayer.setAttribute("aria-hidden", "false");
+    mainBox.classList.remove("active");
 
     // Play video
-    video
-      .play()
-      .then(() => {
-        if (!isMobile) {
-          lockOrientationLandscape();
-        }
-      })
-      .catch(err => console.log("Play error:", err));
+    video.play().catch(err => console.log("Play error:", err));
   });
 });
 
@@ -119,16 +98,13 @@ boxes.forEach((box, index) => {
 if (closeBtn) {
   closeBtn.addEventListener("click", e => {
     e.stopPropagation();
-
     videos.forEach(v => {
       v.pause();
       v.currentTime = 0;
       v.style.display = "none";
     });
-
-    videoPlayer?.classList.remove("active");
-    videoPlayer?.setAttribute("aria-hidden", "true");
-
+    videoPlayer.classList.remove("active");
+    videoPlayer.setAttribute("aria-hidden", "true");
     if (
       document.fullscreenElement ||
       document.webkitFullscreenElement ||
@@ -140,7 +116,7 @@ if (closeBtn) {
 }
 
 // ==================================================
-// FULLSCREEN HELPERS (DESKTOP ONLY)
+// FULLSCREEN HELPERS
 // ==================================================
 function openFullscreen(elem) {
   if (!elem) return;
@@ -156,26 +132,16 @@ function closeFullscreen() {
 }
 
 // ==================================================
-// FULLSCREEN TOGGLE BUTTON (Desktop only)
+// FULLSCREEN BUTTON (Desktop only)
 // ==================================================
 if (fullscreenBtn) {
   if (isMobile) {
-    // Hide fullscreen button completely on mobile/tablets
     fullscreenBtn.style.display = "none";
   } else {
     fullscreenBtn.addEventListener("click", () => {
-      const videoEl = videoPlayer?.querySelector("video");
-      if (!videoEl) return;
-
-      if (
-        !document.fullscreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.msFullscreenElement
-      ) {
-        openFullscreen(videoEl);
-      } else {
-        closeFullscreen();
-      }
+      // Always fullscreen the container, NOT the video element
+      if (!document.fullscreenElement) openFullscreen(videoPlayer);
+      else closeFullscreen();
     });
   }
 }
@@ -194,7 +160,7 @@ function toggleButtons() {
     if (closeBtn) closeBtn.style.display = "none";
     if (!isMobile && fullscreenBtn) fullscreenBtn.style.display = "none";
   } else {
-    if (videoPlayer?.classList.contains("active")) {
+    if (videoPlayer.classList.contains("active")) {
       if (closeBtn) closeBtn.style.display = "flex";
       if (!isMobile && fullscreenBtn) fullscreenBtn.style.display = "flex";
     }
