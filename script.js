@@ -232,7 +232,7 @@ document.addEventListener("webkitfullscreenchange", toggleButtons);
 document.addEventListener("msfullscreenchange", toggleButtons);
 
 // ==================================================
-// AUTO CLOSE VIDEO AFTER EXITING FULLSCREEN (iOS/Android)
+// AUTO CLOSE VIDEO AFTER EXITING FULLSCREEN (Desktop + Android)
 // ==================================================
 function handleFullscreenExit() {
   const isFullscreen =
@@ -257,5 +257,22 @@ function handleFullscreenExit() {
 }
 
 document.addEventListener("fullscreenchange", handleFullscreenExit);
-document.addEventListener("webkitendfullscreen", handleFullscreenExit); // iPhone Safari
 document.addEventListener("msfullscreenchange", handleFullscreenExit);
+
+// ==================================================
+// iOS SAFARI: exit native fullscreen → auto close video
+// ==================================================
+videos.forEach(v => {
+  v.addEventListener("webkitendfullscreen", () => {
+    v.pause();
+    v.currentTime = 0;
+    v.style.display = "none";
+    v.removeAttribute("controls");
+
+    videoPlayer.classList.remove("active");
+    videoPlayer.setAttribute("aria-hidden", "true");
+
+    if (fullscreenBtn) fullscreenBtn.style.display = "none";
+    if (closeBtn) closeBtn.style.display = "none";
+  });
+});
