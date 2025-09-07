@@ -19,7 +19,13 @@
     <!-- =========================
        FRONT PAGE BACKGROUND MEDIA
        ========================= -->
-    <video class="front-media" src="rain.mp4" autoplay muted loop playsinline></video>
+    <video id="frontVideoLandscape" class="front-media" autoplay muted playsinline>
+  <source src="ASSETS/front_l.mp4" type="video/mp4">
+</video>
+
+<video id="frontVideoPortrait" class="front-media" autoplay muted playsinline style="display:none;">
+  <source src="ASSETS/front_p.mp4" type="video/mp4">
+</video>
 
     <!-- =========================
        LAUNCHER BUTTON (BOTTOM CENTER)
@@ -68,12 +74,13 @@
             <!-- SVG close icon -->
             <img src="close.svg" alt="Close" />
         </div>
+        
     </div>
 
     <!-- =========================
        MAIN JAVASCRIPT
        ========================= -->
-    <script src="script1.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>

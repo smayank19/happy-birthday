@@ -28,6 +28,17 @@ body {
   z-index: -1;        
 }
 
+/* Landscape by default */
+#frontVideoPortrait {
+  display: none;
+}
+
+/* Portrait orientation → show portrait video, hide landscape */
+@media screen and (orientation: portrait) {
+  #frontVideoLandscape { display: none !important; }
+  #frontVideoPortrait { display: block !important; }
+}
+
 /* --- Launcher style --- */
 .launcher {
   position: absolute;
@@ -159,7 +170,6 @@ video {
   playsinline: true;
 }
 
-
 /* Fullscreen button */
 .fullscreen-btn, .close-btn {
   display: none; /* hidden by default */
@@ -187,14 +197,8 @@ video {
   color: black;
 }
 
-.video-player.active .fullscreen-btn { 
-  display: flex; 
-  right: 80px;
-}
-.video-player.active .close-btn { 
-  display: flex; 
-  right: 15px;
-}
+.video-player.active .fullscreen-btn { display: flex; right: 80px; }
+.video-player.active .close-btn { display: flex; right: 15px; }
 
 .fullscreen-btn:hover, .close-btn:hover { 
   transform: scale(1.05); 
@@ -211,9 +215,21 @@ video {
   }
 }
 
+/* Portrait video: fill screen height */
+@media screen and (orientation: portrait) {
+  #frontVideoPortrait {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #frontVideoLandscape {
+    display: none !important;
+  }
+}
+
 /* ====================== RESPONSIVE QUERIES ====================== */
 
-/* Small phones (portrait, < 420px) */
 /* Small phones (portrait, < 420px) */
 @media (max-width: 420px) {
   .launcher { width: 35px; height: 35px; }

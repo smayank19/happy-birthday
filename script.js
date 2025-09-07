@@ -9,6 +9,10 @@ const videoPlayer = document.getElementById("videoPlayer");
 const closeBtn = document.getElementById("closeBtn");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 
+// Front background videos
+const frontVideoLandscape = document.getElementById("frontVideoLandscape");
+const frontVideoPortrait = document.getElementById("frontVideoPortrait");
+
 // ==================================================
 // VARIABLES
 // ==================================================
@@ -16,6 +20,50 @@ let positions = ["pos1", "pos2", "pos3"];
 let dragStartX = null;
 let dragging = false;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+// ==================================================
+// ORIENTATION HANDLER FOR FRONT VIDEO
+// ==================================================
+function handleOrientation() {
+  if (!frontVideoLandscape || !frontVideoPortrait) return;
+
+  if (!isMobile) {
+    // Desktop → always landscape
+    frontVideoPortrait.pause();
+    frontVideoPortrait.style.display = "none";
+
+    frontVideoLandscape.style.display = "block";
+    frontVideoLandscape.currentTime = 0; // restart
+    frontVideoLandscape.play().catch(() => {});
+    return;
+  }
+
+  // Mobile → switch by orientation
+  if (window.matchMedia("(orientation: portrait)").matches) {
+    // Portrait → restart portrait video
+    frontVideoLandscape.pause();
+    frontVideoLandscape.style.display = "none";
+
+    frontVideoPortrait.style.display = "block";
+    frontVideoPortrait.currentTime = 0; // restart
+    frontVideoPortrait.play().catch(() => {});
+  } else {
+    // Landscape → restart landscape video
+    frontVideoPortrait.pause();
+    frontVideoPortrait.style.display = "none";
+
+    frontVideoLandscape.style.display = "block";
+    frontVideoLandscape.currentTime = 0; // restart
+    frontVideoLandscape.play().catch(() => {});
+  }
+}
+
+
+
+// Run on load + whenever orientation changes
+window.addEventListener("load", handleOrientation);
+window.addEventListener("resize", handleOrientation);
+window.addEventListener("orientationchange", handleOrientation);
 
 // ==================================================
 // LAUNCHER CLICK → TOGGLE BOXES
@@ -139,7 +187,6 @@ if (fullscreenBtn) {
     fullscreenBtn.style.display = "none";
   } else {
     fullscreenBtn.addEventListener("click", () => {
-      // Always fullscreen the container, NOT the video element
       if (!document.fullscreenElement) openFullscreen(videoPlayer);
       else closeFullscreen();
     });
