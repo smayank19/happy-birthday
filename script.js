@@ -280,3 +280,18 @@ videos.forEach(v => {
     }
   });
 });
+
+// ==================================================
+// iOS Safari Fix → Continue playing inline after fullscreen
+// ==================================================
+videos.forEach(v => {
+  v.addEventListener("webkitendfullscreen", () => {
+    // iOS Safari auto-pauses video → force resume
+    if (videoPlayer.classList.contains("active")) {
+      v.removeAttribute("controls"); // hide native controls
+      v.play().catch(() => {
+        console.log("Autoplay blocked, needs user interaction.");
+      });
+    }
+  });
+});

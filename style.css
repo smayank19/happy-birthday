@@ -210,8 +210,8 @@ video {
 @media screen and (orientation: portrait) {
   .video-player video { 
     transform: rotate(90deg); 
-    width: 100vw; 
-    height: auto; 
+    width: 200vw; 
+    height: 58%; 
     object-fit: cover;
   }
 }
