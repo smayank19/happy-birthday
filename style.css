@@ -191,7 +191,7 @@ video {
   pointer-events: none;
 }
 
-.video-player.active .fullscreen-btn { display: flex; right: 80px; }
+.video-player.active .fullscreen-btn { display: flex; right: 55px; }
 .video-player.active .close-btn      { display: flex; right: 15px; }
 
 .fullscreen-btn:hover, 
