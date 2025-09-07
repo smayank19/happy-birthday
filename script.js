@@ -58,8 +58,6 @@ function handleOrientation() {
   }
 }
 
-
-
 // Run on load + whenever orientation changes
 window.addEventListener("load", handleOrientation);
 window.addEventListener("resize", handleOrientation);
@@ -127,6 +125,7 @@ boxes.forEach((box, index) => {
       v.pause();
       v.currentTime = 0;
       v.style.display = "none";
+      v.removeAttribute("controls");
     });
 
     // Show selected video
@@ -137,6 +136,10 @@ boxes.forEach((box, index) => {
 
     // Play video
     video.play().catch(err => console.log("Play error:", err));
+
+    // Show fullscreen + close button when video active
+    if (fullscreenBtn) fullscreenBtn.style.display = "flex";
+    if (closeBtn) closeBtn.style.display = "flex";
   });
 });
 
@@ -150,16 +153,12 @@ if (closeBtn) {
       v.pause();
       v.currentTime = 0;
       v.style.display = "none";
+      v.removeAttribute("controls"); // remove controls when closing
     });
     videoPlayer.classList.remove("active");
     videoPlayer.setAttribute("aria-hidden", "true");
-    if (
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.msFullscreenElement
-    ) {
-      closeFullscreen();
-    }
+    fullscreenBtn.style.display = "none";
+    closeFullscreen();
   });
 }
 
@@ -180,17 +179,30 @@ function closeFullscreen() {
 }
 
 // ==================================================
-// FULLSCREEN BUTTON (Desktop only)
+// FULLSCREEN BUTTON (Desktop + Mobile)
 // ==================================================
 if (fullscreenBtn) {
-  if (isMobile) {
-    fullscreenBtn.style.display = "none";
-  } else {
-    fullscreenBtn.addEventListener("click", () => {
-      if (!document.fullscreenElement) openFullscreen(videoPlayer);
-      else closeFullscreen();
-    });
-  }
+  fullscreenBtn.style.display = "none"; // hidden until video plays
+
+  fullscreenBtn.addEventListener("click", () => {
+    const activeVideo = [...videos].find(v => v.style.display === "block");
+    if (!activeVideo) return;
+
+    // Add controls so mobile native player works
+    activeVideo.setAttribute("controls", "true");
+
+    if (!document.fullscreenElement &&
+        !document.webkitFullscreenElement &&
+        !document.msFullscreenElement) {
+      // Request fullscreen on video element
+      if (activeVideo.requestFullscreen) activeVideo.requestFullscreen();
+      else if (activeVideo.webkitEnterFullscreen) activeVideo.webkitEnterFullscreen(); // iPhone Safari
+      else if (activeVideo.webkitRequestFullscreen) activeVideo.webkitRequestFullscreen();
+      else if (activeVideo.msRequestFullscreen) activeVideo.msRequestFullscreen();
+    } else {
+      closeFullscreen();
+    }
+  });
 }
 
 // ==================================================
@@ -205,11 +217,11 @@ function toggleButtons() {
   if (isFullscreen) {
     if (launcher) launcher.style.display = "none";
     if (closeBtn) closeBtn.style.display = "none";
-    if (!isMobile && fullscreenBtn) fullscreenBtn.style.display = "none";
+    if (fullscreenBtn) fullscreenBtn.style.display = "none";
   } else {
     if (videoPlayer.classList.contains("active")) {
       if (closeBtn) closeBtn.style.display = "flex";
-      if (!isMobile && fullscreenBtn) fullscreenBtn.style.display = "flex";
+      if (fullscreenBtn) fullscreenBtn.style.display = "flex";
     }
     if (launcher) launcher.style.display = "flex";
   }
