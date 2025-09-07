@@ -210,7 +210,7 @@ video {
   .video-player video { 
     transform: rotate(90deg); 
     width: 100vh; 
-    height: 100vw; 
+    height: auto; 
     object-fit: cover;
   }
 }
