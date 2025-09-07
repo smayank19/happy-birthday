@@ -1,5 +1,7 @@
+/* ====================== GOOGLE FONTS ====================== */
 @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400..800&family=Indie+Flower&family=Luckiest+Guy&family=Martel+Sans:wght@200;300;400;600;700;800;900&family=Michroma&family=Rubik+Mono+One&display=swap');
 
+/* ====================== GLOBAL RESET ====================== */
 * { 
   margin: 0; 
   padding: 0; 
@@ -12,12 +14,12 @@ body {
   justify-content: center; 
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);
+  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
   overflow: hidden; 
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* Front page background media */
+/* ====================== FRONT MEDIA ====================== */
 .front-media {
   position: absolute;
   top: 0;
@@ -28,18 +30,16 @@ body {
   z-index: -1;        
 }
 
-/* Landscape by default */
-#frontVideoPortrait {
-  display: none;
-}
+/* Default: landscape */
+#frontVideoPortrait { display: none; }
 
-/* Portrait orientation → show portrait video, hide landscape */
+/* Portrait orientation → show portrait video */
 @media screen and (orientation: portrait) {
   #frontVideoLandscape { display: none !important; }
   #frontVideoPortrait { display: block !important; }
 }
 
-/* --- Launcher style --- */
+/* ====================== LAUNCHER ====================== */
 .launcher {
   position: absolute;
   bottom: 12px;
@@ -63,7 +63,7 @@ body {
   background: rgba(255,255,255,0.25); 
 }
 
-/* Container for boxes */
+/* ====================== MAIN BOX ====================== */
 .main_box {
   position: absolute;
   bottom: 130px;
@@ -84,7 +84,7 @@ body {
   pointer-events: auto; 
 }
 
-/* Glass effect boxes with images */
+/* ====================== BOXES ====================== */
 .box {
   position: absolute; 
   width: 80px; 
@@ -97,12 +97,12 @@ body {
   cursor: grab;
   backdrop-filter: blur(10px); 
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  transition: transform 0.3s ease-in-out, 
-              background 0.3s ease, 
-              filter 0.3s ease-in-out, 
-              opacity 0.3s ease-in-out;
+  transition: 
+    transform 0.3s ease-in-out, 
+    background 0.3s ease, 
+    filter 0.3s ease-in-out, 
+    opacity 0.3s ease-in-out;
 }
-
 .box img {
   width: 100%;
   height: 100%;
@@ -110,16 +110,10 @@ body {
   border-radius: 15px;
   pointer-events: none; /* allow drag through image */
 }
+.box:active { cursor: grabbing; }
+.box:hover  { background: rgba(255,255,255,0.25); }
 
-.box:active {
-  cursor: grabbing;
-}
-
-.box:hover { 
-  background: rgba(255,255,255,0.25); 
-}
-
-/* Positions */
+/* Position classes */
 .pos1 { 
   transform: translateX(-100px) scale(0.8) rotateY(40deg); 
   z-index: 1; 
@@ -129,7 +123,7 @@ body {
 .pos2 { 
   transform: translateX(0) scale(1.1) rotateY(0deg); 
   z-index: 2; 
-  filter: blur(0); 
+  filter: none; 
   opacity: 1; 
 }
 .pos3 { 
@@ -139,7 +133,7 @@ body {
   opacity: 0.5; 
 }
 
-/* Fullscreen video */
+/* ====================== VIDEO PLAYER ====================== */
 .video-player {
   position: fixed; 
   top: 0; 
@@ -152,9 +146,8 @@ body {
   align-items: center;
   z-index: 999;
 }
-.video-player.active { 
-  display: flex; 
-}
+.video-player.active { display: flex; }
+
 .video-player video { 
   width: 100%; 
   height: 100%; 
@@ -165,14 +158,15 @@ body {
 
 /* iPhone/iPad Safari fix — force inline video */
 video {
-  -webkit-transform: translateZ(0); /* force GPU rendering */
+  -webkit-transform: translateZ(0); /* GPU rendering */
   -webkit-overflow-scrolling: touch;
   -webkit-playsinline: true;
   playsinline: true;
 }
 
-/* Fullscreen button */
-.fullscreen-btn, .close-btn {
+/* ====================== VIDEO CONTROLS ====================== */
+.fullscreen-btn, 
+.close-btn {
   display: none; /* hidden by default */
   position: fixed;
   bottom: 12px;
@@ -190,22 +184,23 @@ video {
   box-shadow: 0 8px 25px rgba(0,0,0,0.3);
   border: 0px solid rgba(255,255,255,0.3);
 }
-
-.fullscreen-btn img, .close-btn img {
+.fullscreen-btn img, 
+.close-btn img {
   width: 98%;
   height: 98%;
   pointer-events: none;
-  color: black;
 }
 
 .video-player.active .fullscreen-btn { display: flex; right: 80px; }
-.video-player.active .close-btn { display: flex; right: 15px; }
+.video-player.active .close-btn      { display: flex; right: 15px; }
 
-.fullscreen-btn:hover, .close-btn:hover { 
+.fullscreen-btn:hover, 
+.close-btn:hover { 
   transform: scale(1.05); 
   background: rgba(255,255,255,0.25); 
 }
 
+/* ====================== ORIENTATION FIX ====================== */
 /* Force landscape look on portrait phones */
 @media screen and (orientation: portrait) {
   .video-player video { 
@@ -214,24 +209,16 @@ video {
     height: 58%; 
     object-fit: cover;
   }
-}
-
-/* Portrait video: fill screen height */
-@media screen and (orientation: portrait) {
   #frontVideoPortrait {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-
-  #frontVideoLandscape {
-    display: none !important;
-  }
+  #frontVideoLandscape { display: none !important; }
 }
 
 /* ====================== RESPONSIVE QUERIES ====================== */
-
-/* Small phones (portrait, < 420px) */
+/* Small phones (< 420px) */
 @media (max-width: 420px) {
   .launcher { width: 35px; height: 35px; }
   .close-btn, .fullscreen-btn { width: 25px; height: 25px; }
