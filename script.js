@@ -230,3 +230,32 @@ function toggleButtons() {
 document.addEventListener("fullscreenchange", toggleButtons);
 document.addEventListener("webkitfullscreenchange", toggleButtons);
 document.addEventListener("msfullscreenchange", toggleButtons);
+
+// ==================================================
+// AUTO CLOSE VIDEO AFTER EXITING FULLSCREEN (iOS/Android)
+// ==================================================
+function handleFullscreenExit() {
+  const isFullscreen =
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    document.msFullscreenElement;
+
+  if (!isFullscreen) {
+    // Fullscreen exited → stop & close video
+    videos.forEach(v => {
+      v.pause();
+      v.currentTime = 0;
+      v.style.display = "none";
+      v.removeAttribute("controls");
+    });
+    videoPlayer.classList.remove("active");
+    videoPlayer.setAttribute("aria-hidden", "true");
+
+    if (fullscreenBtn) fullscreenBtn.style.display = "none";
+    if (closeBtn) closeBtn.style.display = "none";
+  }
+}
+
+document.addEventListener("fullscreenchange", handleFullscreenExit);
+document.addEventListener("webkitendfullscreen", handleFullscreenExit); // iPhone Safari
+document.addEventListener("msfullscreenchange", handleFullscreenExit);
