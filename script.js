@@ -232,7 +232,7 @@ document.addEventListener("webkitfullscreenchange", toggleButtons);
 document.addEventListener("msfullscreenchange", toggleButtons);
 
 // ==================================================
-// AUTO CLOSE VIDEO AFTER EXITING FULLSCREEN (Desktop + Android)
+// FULLSCREEN EXIT HANDLING (Desktop + iOS/Android)
 // ==================================================
 function handleFullscreenExit() {
   const isFullscreen =
@@ -241,38 +241,42 @@ function handleFullscreenExit() {
     document.msFullscreenElement;
 
   if (!isFullscreen) {
-    // Fullscreen exited → stop & close video
-    videos.forEach(v => {
-      v.pause();
-      v.currentTime = 0;
-      v.style.display = "none";
-      v.removeAttribute("controls");
-    });
-    videoPlayer.classList.remove("active");
-    videoPlayer.setAttribute("aria-hidden", "true");
+    const activeVideo = [...videos].find(v => v.style.display === "block");
+    if (activeVideo) {
+      // Remove fullscreen-only controls
+      activeVideo.removeAttribute("controls");
 
-    if (fullscreenBtn) fullscreenBtn.style.display = "none";
-    if (closeBtn) closeBtn.style.display = "none";
+      // Continue playing inline
+      activeVideo.play().catch(() => {});
+    }
+
+    // Restore buttons
+    if (videoPlayer.classList.contains("active")) {
+      if (closeBtn) closeBtn.style.display = "flex";
+      if (fullscreenBtn) fullscreenBtn.style.display = "flex";
+    }
   }
 }
 
 document.addEventListener("fullscreenchange", handleFullscreenExit);
+document.addEventListener("webkitfullscreenchange", handleFullscreenExit);
 document.addEventListener("msfullscreenchange", handleFullscreenExit);
 
 // ==================================================
-// iOS SAFARI: exit native fullscreen → auto close video
+// iOS SAFARI: exit native fullscreen → keep video inline
 // ==================================================
 videos.forEach(v => {
   v.addEventListener("webkitendfullscreen", () => {
-    v.pause();
-    v.currentTime = 0;
-    v.style.display = "none";
+    // Remove fullscreen-only controls
     v.removeAttribute("controls");
 
-    videoPlayer.classList.remove("active");
-    videoPlayer.setAttribute("aria-hidden", "true");
+    // Keep playing inline
+    v.play().catch(() => {});
 
-    if (fullscreenBtn) fullscreenBtn.style.display = "none";
-    if (closeBtn) closeBtn.style.display = "none";
+    // Restore buttons
+    if (videoPlayer.classList.contains("active")) {
+      if (closeBtn) closeBtn.style.display = "flex";
+      if (fullscreenBtn) fullscreenBtn.style.display = "flex";
+    }
   });
 });
